@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+    <head>
+        <meta charset="UTF-8">
+        <title>欢迎页面-X-admin2.1</title>
+        <meta name="renderer" content="webkit">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+        <link rel="stylesheet" href="./css/font.css">
+        <link rel="stylesheet" href="./css/xadmin.css">
+        <script src="lib/layui/layui.js" charset="utf-8"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script src="./js/xadmin.js" charset="utf-8"></script>
+    </head>
+    <body>
+    <div class="x-body" id="appWelcome">
+        <blockquote class="layui-elem-quote">欢迎
+            <span class="x-red">{{userInfo.realname}}</span>！上次登录时间:{{userInfo.last_time}}</blockquote>
+        <fieldset class="layui-elem-field">
+            <legend>室费统计</legend>
+            <div class="layui-field-box">
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+                        <div class="layui-card-body">
+                            <div class="layui-carousel x-admin-carousel x-admin-backlog" lay-anim="" lay-indicator="inside" lay-arrow="none" style="width: 100%; height: 90px;">
+                                <div carousel-item="">
+                                    <ul class="layui-row layui-col-space10 layui-this">
+                                        <li class="layui-col-xs2">
+                                            <a href="javascript:;" class="x-admin-backlog-body">
+                                                <h3>总室费</h3>
+                                                <p>
+                                                    <cite class="iconfont">&#xe70c;{{sumMoney}}</cite></p>
+                                            </a>
+                                        </li>
+                                        <li class="layui-col-xs2">
+                                            <a href="javascript:;" class="x-admin-backlog-body">
+                                                <h3>剩余室费</h3>
+                                                <p>
+                                                    <cite class="iconfont">&#xe70c;{{balance}}</cite></p>
+                                            </a>
+                                        </li>
+                                        <li class="layui-col-xs2">
+                                            <a href="javascript:;" class="x-admin-backlog-body">
+                                                <h3>人数</h3>
+                                                <p>
+                                                    <cite class="iconfont">&#xe726;{{userNum}}</cite></p>
+                                            </a>
+                                        </li>
+                                        <li class="layui-col-xs2">
+                                            <a href="javascript:;" class="x-admin-backlog-body">
+                                                <h3>当月支出总费用</h3>
+                                                <p>
+                                                    <cite class="iconfont">&#xe70c;{{moneyMonth}}</cite></p>
+                                            </a>
+                                        </li>
+                                        <li class="layui-col-xs2">
+                                            <a href="javascript:;" class="x-admin-backlog-body">
+                                                <h3>当天支出总费用</h3>
+                                                <p>
+                                                    <cite class="iconfont">&#xe70c;{{moneyDay}}</cite></p>
+                                            </a>
+                                        </li>
+                                        <li class="layui-col-xs2" id="addOrder">
+                                            <a href="javascript:;" class="x-admin-backlog-body">
+                                                <h3>添加消费记录</h3>
+                                                <p>
+                                                    <cite class="iconfont">&#xe6b9;</cite></p>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset class="layui-elem-field">
+            <legend>系统通知</legend>
+            <div class="layui-field-box">
+                <table class="layui-table" lay-skin="line">
+                    <tbody>
+                        <tr>
+                            <td >
+                                <a class="x-a" href="/" target="_blank">版本内测中</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </fieldset>
+
+        <fieldset class="layui-elem-field">
+            <legend>开发团队</legend>
+            <div class="layui-field-box">
+                <table class="layui-table">
+                    <tbody>
+                        <tr>
+                            <th>开发者</th>
+                            <td>XXX(24197396@qq.com)</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </fieldset>
+        <!--<blockquote class="layui-elem-quote layui-quote-nm">感谢layui,百度Echarts,jquery,本系统由x-admin提供技术支持。</blockquote>-->
+    </div>
+    <script>
+        var data={
+            userInfo:JSON.parse(localStorage.getItem("userInfo")),
+            moneyMonth:0.00,
+            moneyDay: 0.0,
+            sumMoney:0.0,
+            userNum: 0,
+            balance: 0.0
+        };
+        layui.use(['form','layer'], function(){
+            var $ = layui.jquery;
+            var layer = layui.layer;
+            $("#addOrder").click(function () {
+                // x_admin_show('添加消费记录','./order-add.html');
+                var w=($(window).width()*0.9);
+                var h=($(window).height() - 50);
+                layer.open({
+                    type: 2,
+                    area: [w+'px', h +'px'],
+                    fix: false, //不固定
+                    maxmin: true,
+                    shadeClose: true,
+                    shade:0.4,
+                    title: '添加消费记录',
+                    content: './order-add.html',
+                    success: function(){
+                        //窗口加载成功刷新frame
+                        // location.replace(location.href);
+                    },
+                    cancel:function(){
+                        //关闭窗口之后刷新frame
+                        location.replace(location.href);
+                    },
+                    end:function(){
+                        //窗口销毁之后刷新frame
+                        location.replace(location.href);
+                    }
+                });
+            })
+        });
+        var vm=new Vue({
+            el:"#appWelcome",
+            data:data,
+            mounted:function(){
+                axios.get('/order/count', {params:{
+                        date: new Date(),
+                        userId: 2
+                    }
+
+                })
+                    .then(function (response) {
+                        console.log(response);
+                        Vue.set(data,'moneyMonth', response.data.moneyMonth);
+                        Vue.set(data,'moneyDay', response.data.moneyDay);
+                        Vue.set(data,'sumMoney', response.data.sumMoney);
+                        Vue.set(data,'userNum', response.data.userNum);
+                        Vue.set(data,'balance', response.data.balance);
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
+            methods:{
+
+            },
+        })
+    </script>
+    </body>
+</html>
